@@ -1,0 +1,53 @@
+version: '3.8'
+
+services:
+  db:
+    image: mysql:8.0
+    container_name: odontologia_db
+    environment:
+      MYSQL_ROOT_PASSWORD: 561222
+      MYSQL_DATABASE: odontologia
+    ports:
+      - "3306:3306"
+    volumes:
+      - db_data:/var/lib/mysql
+    networks:
+      - odontologia-network
+
+  phpmyadmin:
+    image: phpmyadmin/phpmyadmin
+    container_name: odontologia_phpmyadmin
+    environment:
+      PMA_HOST: db
+      PMA_PORT: 3306
+      PMA_USER: root
+      PMA_PASSWORD: 561222
+    ports:
+      - "8081:80"
+    depends_on:
+      - db
+    networks:
+      - odontologia-network
+
+  api:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+    container_name: odontologia_api
+    ports:
+      - "8080:8080"
+    depends_on:
+      - db
+    environment:
+      - SPRING_DATASOURCE_URL=jdbc:mysql://db:3306/odontologia?useSSL=false&serverTimezone=UTC&allowPublicKeyRetrieval=true
+      - SPRING_DATASOURCE_USERNAME=odontologia
+      - SPRING_DATASOURCE_PASSWORD=561222
+    networks:
+      - odontologia-network
+
+networks:
+  odontologia-network:
+    driver: bridge
+
+volumes:
+  db_data:
