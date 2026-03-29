@@ -1,0 +1,8 @@
+{
+  "name": " Consultório Odontológico Dr. Rimsky e Dra. Yoko original",
+  "description": "ERP e Prontuário Odontológico completo com agenda inteligente, odontograma interativo, gestão financeira e conformidade LGPD.",
+  "requestFramePermissions": [
+    "camera",
+    "microphone"
+  ]
+}
